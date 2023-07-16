@@ -1,0 +1,28 @@
+---
+# defaults file for slackroll
+
+slackroll_alien_sbrepo_enabled: false
+
+slackroll_alien_sbrepo: "http://slackware.uk/people/alien/sbrepos/{{ ansible_distribution_version }}/{{ 'x86_64' if ansible_architecture == 'x86_64' else 'x86'}}/"
+
+slackroll_alien_restricted_sbrepo_enabled: false
+
+slackroll_alien_restricted_sbrepo: "http://slackware.uk/people/alien/restricted_sbrepos/{{ ansible_distribution_version }}/{{ 'x86_64' if ansible_architecture == 'x86_64' else 'x86'}}/"
+
+slackroll_alien_multilib_enabled: false
+
+slackroll_alien_multilib_repo: "http://slackware.uk/people/alien/multilib/{{ ansible_distribution_version }}/"
+
+slackroll_mirror: "https://slackware.uk/slackware{{ 'arm' if ansible_architecture == 'armv7l' else '' }}/slackware{{ '64' if ansible_architecture == 'x86_64' else ('arm' if ansible_architecture == 'armv7l' else '') }}-{{ ansible_distribution_version }}/"
+
+slackroll_caffe_pkg_repo_base: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  63306437666637333934356165366432333737373037613464366235313732636463386665643765
+  6265313362363562303237613864306163393834313535360a333631613931333235633735623835
+  65333164616432653764616665323030633463336262336532666666343238366461653462646335
+  6636613930643765350a393130343131663238666562346161613833366438383866346439303430
+  39306230653662353264336565626561613934353133356562306638333933356332
+
+slackroll_caffe_pkg_repo: "{{ slackroll_caffe_pkg_repo_base }}/{{ ansible_distribution_version }}/{{ 'x86_64' if ansible_architecture == 'x86_64' else ('arm' if ansible_architecture == 'armv7l' else 'i686') }}/"
+
+slackroll_caffe_sarpi_pkg_repo: "{{ slackroll_caffe_pkg_repo_base }}/sarpi2-{{ ansible_distribution_version }}/arm/"

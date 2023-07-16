@@ -1,0 +1,89 @@
+---
+# tasks file for slackroll
+- name: Check if slackroll is installed.
+  shell: ls /var/lib/pkgtools/packages/slackroll-*
+  changed_when: false
+  register: slackroll_install_status
+
+- name: Configure slackroll primary mirror.
+  copy:
+    dest: "/var/slackroll/mirror"
+    content: |
+      {{ slackroll_mirror }}
+  become: true
+
+- name: Gather blacklist.
+  shell: |
+    slackroll batch print-blacklist | sed '1d;$d' | sed 's/^[[:space:]]*[[:digit:]][[:digit:]]*[[:space:]]*//'
+  changed_when: false
+  register: slackroll_blacklist
+  become: true
+
+- name: Blacklist /testing.
+  shell: |
+    slackroll batch blacklist-add '^\./testing.*'
+  when:
+    - "'^\\./testing.*' not in slackroll_blacklist.stdout"
+  become: true
+
+- name: Gather repos.
+  shell: |
+    slackroll batch list-repos | sed '1d;$d' | sed 's/^[[:space:]]*[[:digit:]][[:digit:]]*[[:space:]]*//'
+  changed_when: false
+  register: slackroll_repos
+  become: true
+
+- name: Add caffe pkg repo.
+  shell: |
+    slackroll batch add-repo '{{ slackroll_caffe_pkg_repo }}'
+  when:
+    - "slackroll_caffe_pkg_repo | string not in slackroll_repos.stdout"
+  become: true
+
+- name: Add AlienBOB's sbrepo.
+  shell: |
+    slackroll batch add-repo '{{ slackroll_alien_sbrepo }}'
+  when:
+    - slackroll_alien_sbrepo_enabled | bool
+    - "slackroll_alien_sbrepo | string not in slackroll_repos.stdout"
+  become: true
+
+- name: Limit AlienBOB's packages.
+  shell: |
+    slackroll batch blacklist-add '^\.\/(?!chromium|libreoffice|vlc).*$@\/sbrepos\/'
+  when:
+    - slackroll_alien_sbrepo_enabled | bool
+    - "'^\\.\\/(?!chromium|libreoffice|vlc).*$@\\/sbrepos\\/' not in slackroll_blacklist.stdout"
+  become: true
+
+- name: Add AlienBOB's restricted sbrepo.
+  shell: |
+    slackroll batch add-repo '{{ slackroll_alien_restricted_sbrepo }}'
+  when:
+    - slackroll_alien_restricted_sbrepo_enabled | bool
+    - "slackroll_alien_restricted_sbrepo | string not in slackroll_repos.stdout"
+  become: true
+
+- name: Add AlienBOB's multilib.
+  shell: |
+    slackroll batch add-repo '{{ slackroll_alien_multilib_repo }}'
+  when:
+    - slackroll_alien_multilib_enabled | bool
+    - "slackroll_alien_multilib_repo | string not in slackroll_repos.stdout"
+  become: true
+
+- name: Blacklist non-multilib glibc packages.
+  shell: |
+    slackroll batch blacklist-add 'glibc-(?!zoneinfo)@^(?!http)'
+  when:
+    - slackroll_alien_multilib_enabled | bool
+    - "'glibc-(?!zoneinfo)@^(?!http)' not in slackroll_blacklist.stdout"
+  become: true
+
+- name: Add sarpi caffe repo.
+  shell: |
+    slackroll batch add-repo '{{ slackroll_caffe_sarpi_pkg_repo }}'
+  when:
+    - ansible_architecture == 'armv7l'
+    - "slackroll_caffe_sarpi_pkg_repo | string not in slackroll_repos.stdout"
+  become: true

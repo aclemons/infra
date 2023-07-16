@@ -1,6 +1,6 @@
 galaxy_info:
   author: aclemons
-  description: Configure ntpd on Slackware Linux.
+  description: Install and configure slackroll on Slackware Linux.
   license: license (MIT)
 
   min_ansible_version: 2.1

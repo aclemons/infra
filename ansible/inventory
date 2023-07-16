@@ -1,8 +1,9 @@
 [all]
 caffe ntp_area=nl remote_user=root
 build ntp_area=fi remote_user=root
-dalepc ntp_area=us
-davidpc ntp_area=us
+dalepc ntp_area=us slackroll_alien_sbrepo_enabled=true slackroll_alien_multilib_enabled=true slackroll_alien_restricted_sbrepo_enabled=true
+davidpc ntp_area=us slackroll_alien_sbrepo_enabled=true slackroll_alien_multilib_enabled=true slackroll_alien_restricted_sbrepo_enabled=true
+yogi ntp_area=ja ansible_connection=local ansible_become_method=su slackroll_alien_sbrepo_enabled=true slackroll_alien_multilib_enabled=true
 
 [cloud]
 caffe
@@ -11,3 +12,6 @@ build
 [farm]
 dalepc
 davidpc
+
+[arm]
+alarmpi ntp_area=ja
