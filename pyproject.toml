@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "infra"
+version = "0.1.0"
+description = "Infrastructure"
+authors = ["Andrew Clemons <andrew.clemons@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.11.4"
+ansible = "8.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
