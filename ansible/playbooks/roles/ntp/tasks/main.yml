@@ -1,0 +1,27 @@
+---
+# tasks file for ntp
+- name: Enable ntpd.
+  file:
+    state: file
+    path: /etc/rc.d/rc.ntpd
+    mode: "0755"
+  become: true
+
+- name: Check status of ntpd.
+  shell: /etc/rc.d/rc.ntpd status
+  changed_when: false
+  register: ntpd_status
+  become: true
+
+- name: Start ntpd if not running.
+  shell: /etc/rc.d/rc.ntpd start
+  when: ntpd_status.rc != 0
+  become: true
+
+- name: Generate ntp configuration file.
+  template:
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
+    mode: 0644
+  notify: restart ntpd
+  become: true

@@ -1,0 +1,13 @@
+[all]
+caffe ntp_area=nl remote_user=root
+build ntp_area=fi remote_user=root
+dalepc ntp_area=us
+davidpc ntp_area=us
+
+[cloud]
+caffe
+build
+
+[farm]
+dalepc
+davidpc

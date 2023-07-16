@@ -1,0 +1,5 @@
+---
+# handlers file for ntp
+- name: restart ntpd
+  shell: /etc/rc.d/rc.ntpd restart
+  become: true
