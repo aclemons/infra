@@ -38,6 +38,13 @@
       {{ slackroll_mirror }}
   become: true
 
+- name: install slackware gpg key
+  gpg_key:
+    gpgbin: /usr/bin/gpg2
+    fpr: EC5649DA401E22ABFA6736EF6A4463C040102233
+    keyserver: eu.pool.sks-keyservers.net
+  become: true
+
 - name: Gather blacklist.
   shell: |
     slackroll batch print-blacklist | sed '1d;$d' | sed 's/^[[:space:]]*[[:digit:]][[:digit:]]*[[:space:]]*//'
@@ -66,12 +73,28 @@
     - "slackroll_caffe_pkg_repo | string not in slackroll_repos.stdout"
   become: true
 
+- name: install caffe gpg key
+  gpg_key:
+    gpgbin: /usr/bin/gpg2
+    fpr: 217C7228C48DC5FF2C876E3ACD26380FFACBDA2B
+    keyserver: eu.pool.sks-keyservers.net
+  become: true
+
 - name: Add AlienBOB's sbrepo.
   shell: |
     slackroll batch add-repo '{{ slackroll_alien_sbrepo }}'
   when:
     - slackroll_alien_sbrepo_enabled | bool
     - "slackroll_alien_sbrepo | string not in slackroll_repos.stdout"
+  become: true
+
+- name: install caffe gpg key
+  gpg_key:
+    gpgbin: /usr/bin/gpg2
+    fpr: F2CE1B92EE1F2C0CE97E581E5E56AAAFA75CBDA0
+    keyserver: eu.pool.sks-keyservers.net
+  when:
+    - slackroll_alien_sbrepo_enabled | bool
   become: true
 
 - name: Limit AlienBOB's packages.
