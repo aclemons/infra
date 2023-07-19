@@ -4,6 +4,32 @@
   shell: ls /var/lib/pkgtools/packages/slackroll-*
   changed_when: false
   register: slackroll_install_status
+  failed_when: "slackroll_install_status.rc not in [ 0, 2 ]"
+
+- name: Download slackroll (arm)
+  ansible.builtin.get_url:
+    url: "{{ slackroll_caffe_pkg_repo }}/system/slackroll/slackroll-v51-noarch-1_slack15.0acl.txz"
+    dest: /tmp/slackroll-v51-noarch-1_slack15.0acl.txz
+    checksum: "{{ 'md5:6318aeb68c9c1d4e0880c001d5810c1d' if ansible_architecture == 'armv7l' else 'md5:cee9faa99476ff9315685d035408c914' }}"
+  when:
+    - slackroll_install_status.rc != 0
+
+- name: Install slackroll
+  shell: |
+    installpkg /tmp/slackroll-v51-noarch-1_slack15.0acl.txz
+    rm /tmp/slackroll-v51-noarch-1_slack15.0acl.txz
+  when:
+    - slackroll_install_status.rc != 0
+  become: true
+
+- name: Ensure slackroll directory exists
+  file:
+    path: /var/slackroll
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  become: true
 
 - name: Configure slackroll primary mirror.
   copy:
