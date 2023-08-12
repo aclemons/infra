@@ -116,7 +116,7 @@ resource "aws_iam_role_policy" "terraform_permissions" {
           "s3:List*",
           "s3:CreateBucket"
         ],
-        Resource = "arn:aws:s3:::${var.prefix}-terraform"
+        Resource = "arn:aws:s3:::${var.prefix}-*terraform"
       },
       {
         Effect = "Allow"
@@ -125,7 +125,7 @@ resource "aws_iam_role_policy" "terraform_permissions" {
           "s3:PutObject",
           "s3:DeleteObject",
         ],
-        Resource = "arn:aws:s3:::${var.prefix}-terraform/*/terraform.tfstate"
+        Resource = "arn:aws:s3:::${var.prefix}-*terraform/*/terraform.tfstate"
       },
       {
         Effect = "Allow"
@@ -139,7 +139,7 @@ resource "aws_iam_role_policy" "terraform_permissions" {
           "dynamodb:TagResource",
           "dynamodb:UntagResource",
         ],
-        Resource = "arn:aws:dynamodb:*:*:table/${var.prefix}-terraform"
+        Resource = "arn:aws:dynamodb:*:*:table/${var.prefix}-*terraform"
       },
     ]
   })
