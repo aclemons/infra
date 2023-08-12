@@ -9,7 +9,17 @@ repos:
       - id: check-json
       - id: check-toml
       - id: check-added-large-files
+
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v3.0.1
     hooks:
       - id: prettier
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.81.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_tflint
+        args:
+          - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl
+          - --hook-config=--delegate-chdir
