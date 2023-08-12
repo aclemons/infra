@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket  = "caffe-terraform"
-    key     = "state/infra.tfstate"
+    key     = "state/static.tfstate"
     region  = "eu-central-1"
     encrypt = true
 
@@ -16,7 +16,6 @@ terraform {
   }
 
   required_version = "1.5.5"
-
 }
 
 provider "aws" {
