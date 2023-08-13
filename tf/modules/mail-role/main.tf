@@ -202,6 +202,7 @@ resource "aws_iam_role_policy" "lambda_permissions" {
         Action = [
           "lambda:ListFunctions",
           "lambda:ListEventSourceMappings",
+          "lambda:GetLayerVersion",
         ],
         Resource = "*"
       }
