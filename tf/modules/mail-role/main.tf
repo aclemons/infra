@@ -163,3 +163,48 @@ resource "aws_iam_role_policy" "ecr_permissions" {
     ]
   })
 }
+
+resource "aws_iam_role_policy" "cloudwatch_permissions" {
+  name = "cloudwatch-permissions"
+  role = aws_iam_role.mail_automation.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = "logs:DescribeLogGroups",
+        Resource = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"
+      },
+      {
+        Effect   = "Allow",
+        Action   = "logs:*",
+        Resource = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.prefix}*"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "lambda_permissions" {
+  name = "lambda-permissions"
+  role = aws_iam_role.mail_automation.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "lambda:*"
+        Resource = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.prefix}*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "lambda:ListFunctions",
+          "lambda:ListEventSourceMappings",
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
