@@ -11,3 +11,10 @@ module "koinobori_role" {
   prefix    = "koinobori"
   role_name = "koinobori-automation"
 }
+
+module "mail_role" {
+  source = "../modules/mail-role"
+
+  prefix    = "mail"
+  role_name = "mail-automation"
+}
