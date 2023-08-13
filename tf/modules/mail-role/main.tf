@@ -220,17 +220,15 @@ resource "aws_iam_role_policy" "ssm_permissions" {
       {
         Effect = "Allow"
         Action = [
-          "ssm:Get*",
           "ssm:Describe*",
           "ssm:ListTagsForResource",
         ],
-        Resource = [
-          "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${var.prefix}/*",
-        ]
+        Resource = "*"
       },
       {
         Effect = "Allow"
         Action = [
+          "ssm:Get*",
           "ssm:PutParameter",
           "ssm:AddTagsToResource",
           "ssm:RemoveTagsFromResource",
@@ -238,6 +236,22 @@ resource "aws_iam_role_policy" "ssm_permissions" {
         Resource = [
           "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${var.prefix}/*",
         ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "events" {
+  name = "events-permissions"
+  role = aws_iam_role.mail_automation.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "events:*"
+        Resource = "arn:aws:events:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:rule/${var.prefix}*"
       }
     ]
   })
