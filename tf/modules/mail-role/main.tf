@@ -209,3 +209,36 @@ resource "aws_iam_role_policy" "lambda_permissions" {
     ]
   })
 }
+
+resource "aws_iam_role_policy" "ssm_permissions" {
+  name = "ssm-permissions"
+  role = aws_iam_role.mail_automation.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:Get*",
+          "ssm:Describe*",
+          "ssm:ListTagsForResource",
+        ],
+        Resource = [
+          "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${var.prefix}/*",
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:PutParameter",
+          "ssm:AddTagsToResource",
+          "ssm:RemoveTagsFromResource",
+        ],
+        Resource = [
+          "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${var.prefix}/*",
+        ]
+      }
+    ]
+  })
+}
