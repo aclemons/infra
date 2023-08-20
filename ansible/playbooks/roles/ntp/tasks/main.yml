@@ -12,6 +12,7 @@
   changed_when: false
   register: ntpd_status
   become: true
+  failed_when: "ntpd_status.rc not in [ 0, 1 ]"
 
 - name: Start ntpd if not running.
   shell: /etc/rc.d/rc.ntpd start
