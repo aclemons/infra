@@ -1,0 +1,73 @@
+---
+# tasks file for prosody
+- name: "Create prosody database"
+  community.postgresql.postgresql_db:
+    name: "{{ prosody_db_name }}"
+  become: yes
+  become_user: postgres
+
+- name: "Create prosody user"
+  community.postgresql.postgresql_user:
+    db: "{{ prosody_db_name }}"
+    name: "{{ prosody_username }}"
+    password: "{{ prosody_password }}"
+
+- name: Setup prosody privs
+  community.postgresql.postgresql_privs:
+    db: "{{ prosody_db_name }}"
+    privs: ALL
+    type: schema
+    objs: public
+    role: "{{ prosody_username }}"
+
+- name: Ensure group "prosody" exists with correct gid
+  ansible.builtin.group:
+    name: prosody
+    state: present
+    gid: 274
+
+- name: Add the user 'prosody' with a specific uid and a primary group of 'prosody'
+  ansible.builtin.user:
+    name: prosody
+    uid: 274
+    group: 274
+    home: /var/lib/prosody
+    shell: /sbin/nologin
+
+- name: Check if prosody is installed.
+  shell: ls /var/lib/pkgtools/packages/prosody-*
+  changed_when: false
+  register: prosody_install_status
+  failed_when: "prosody_install_status.rc not in [ 0, 2 ]"
+
+- name: Install prosody
+  shell: |
+    slackroll batch update
+    url="$(slackroll batch urls prosody | sed -n '$p' | sed 's/\.t.z$//').dep"
+    deps="$(curl -f -s "$url" | sort | paste -s -d' ')"
+    slackroll batch install $deps prosody
+  when:
+    - prosody_install_status.rc != 0
+  become: true
+
+- name: Check if prosody-modules are installed.
+  shell: ls /var/lib/pkgtools/packages/prosody-mod-*
+  changed_when: false
+  register: prosody_mod_install_status
+  failed_when: "prosody_mod_install_status.rc not in [ 0, 2 ]"
+
+- name: Install prosody modules
+  shell: |
+    slackroll batch update
+    slackroll batch install prosody-mod-block-strangers prosody-mod-cloud-notify prosody-mod-filter-chatstates prosody-mod-throttle-presence prosody-mod-vcard-muc
+  when:
+    - prosody_mod_install_status.rc != 0
+  become: true
+
+- name: Generate prosody configuration file.
+  template:
+    src: prosody.cfg.lua.j2
+    dest: /etc/prosody/prosody.cfg.lua
+    mode: 0600
+  notify: restart prosody
+  become: true

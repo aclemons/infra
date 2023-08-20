@@ -20,4 +20,8 @@
 - name: Renew certificates
   shell: |
     certbot certonly -n --standalone --email {{ certbot_email }} -d {{ certbot_domains }}
+    if [[ -e /etc/prosody/prosody.cfg.lua ]] ;
+      prosodyctl --root cert import /etc/letsencrypt/live
+      prosodyctl reload
+    fi
   become: true

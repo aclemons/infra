@@ -1,0 +1,5 @@
+---
+# handlers file for prosody
+- name: restart prosody
+  shell: /etc/rc.d/rc.prosody restart
+  become: true
