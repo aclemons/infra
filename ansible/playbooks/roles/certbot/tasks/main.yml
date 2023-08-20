@@ -1,0 +1,23 @@
+---
+# tasks file for certbot
+
+- name: Check if certbot is installed.
+  shell: ls /var/lib/pkgtools/packages/letsencrypt-*
+  changed_when: false
+  register: certbot_install_status
+  failed_when: "certbot_install_status.rc not in [ 0, 2 ]"
+
+- name: Install certbot
+  shell: |
+    slackroll batch update
+    url="$(slackroll batch urls letsencrypt | sed -n '$p' | sed 's/\.t.z$//').dep"
+    deps="$(curl -f -s "$url" | sort | paste -s -d' ')"
+    slackroll batch install $deps letsencrypt
+  when:
+    - certbot_install_status.rc != 0
+  become: true
+
+- name: Renew certificates
+  shell: |
+    certbot certonly -n --standalone --email {{ certbot_email }} -d {{ certbot_domains }}
+  become: true
