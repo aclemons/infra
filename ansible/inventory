@@ -1,5 +1,5 @@
 [all]
-caffe ntp_area=nl remote_user=root
+caffe ntp_area=de remote_user=root
 build ntp_area=fi remote_user=root
 dalepc ntp_area=us slackroll_alien_sbrepo_enabled=true slackroll_alien_multilib_enabled=true slackroll_alien_restricted_sbrepo_enabled=true
 davidpc ntp_area=us slackroll_alien_sbrepo_enabled=true slackroll_alien_multilib_enabled=true slackroll_alien_restricted_sbrepo_enabled=true
