@@ -27,6 +27,20 @@
     - postgresql_install_status.rc != 0
   become: true
 
+- name: Check if python3-psycopg2 is installed.
+  shell: ls /var/lib/pkgtools/packages/python3-psycopg2-*
+  changed_when: false
+  register: psycopg2_install_status
+  failed_when: "psycopg2_install_status.rc not in [ 0, 2 ]"
+
+- name: Install python3-pyscopg2
+  shell: |
+    slackroll batch update
+    slackroll batch install python3-psycopg2
+  when:
+    - psycopg2_install_status.rc != 0
+  become: true
+
 - name: "Check if postgresql is initialised"
   ansible.builtin.stat:
     path: "/var/lib/pgsql/14/data/pg_hba.conf"
