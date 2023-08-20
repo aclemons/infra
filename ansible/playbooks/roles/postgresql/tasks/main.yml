@@ -1,0 +1,51 @@
+---
+# tasks file for postresql
+- name: Ensure group "postgresql" exists with correct gid
+  ansible.builtin.group:
+    name: postgres
+    state: present
+    gid: 209
+
+- name: Add the user 'postgres' with a specific uid and a primary group of 'postgres'
+  ansible.builtin.user:
+    name: postgres
+    uid: 209
+    group: 209
+    home: /var/lib/pgsql
+
+- name: Check if postgresql is installed.
+  shell: ls /var/lib/pkgtools/packages/postgresql-*
+  changed_when: false
+  register: postgresql_install_status
+  failed_when: "postgresql_install_status.rc not in [ 0, 2 ]"
+
+- name: Install postgresql
+  shell: |
+    slackroll batch update
+    slackroll batch install postgresql
+  when:
+    - postgresql_install_status.rc != 0
+  become: true
+
+- name: "Check if postgresql is initialised"
+  ansible.builtin.stat:
+    path: "/var/lib/pgsql/14/data/pg_hba.conf"
+  register: postgresql_data
+
+- name: "Init postgresql"
+  shell: |
+    su postgres -c "initdb -D /var/lib/pgsql/14/data --locale=en_GB.UTF-8"
+  when: not postgresql_data.stat.exists
+  become: true
+
+- name: Check status of postgresql.
+  shell: /etc/rc.d/rc.postgresql status
+  changed_when: false
+  register: postgresql_status
+  become: true
+  failed_when: "postgresql_status.rc not in [ 0, 1 ]"
+
+- name: Start postgresql if not running.
+  shell: /etc/rc.d/rc.postgresql start
+  when: postgresql_status.rc != 0
+  become: true
