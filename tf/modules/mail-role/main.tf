@@ -210,6 +210,26 @@ resource "aws_iam_role_policy" "lambda_permissions" {
   })
 }
 
+resource "aws_iam_role_policy" "ses_permissions" {
+  name = "ses-permissions"
+  role = aws_iam_role.mail_automation.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ses:DeleteIdentity",
+          "ses:GetIdentityVerificationAttributes",
+          "ses:VerifyDomainIdentity",
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_role_policy" "ssm_permissions" {
   name = "ssm-permissions"
   role = aws_iam_role.mail_automation.id
