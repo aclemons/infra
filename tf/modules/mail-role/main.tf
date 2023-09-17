@@ -140,6 +140,27 @@ resource "aws_iam_role_policy" "terraform_permissions" {
   })
 }
 
+resource "aws_iam_role_policy" "s3_permissions" {
+  name = "s3-permissions"
+  role = aws_iam_role.mail_automation.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "s3:*"
+        Resource = "arn:aws:s3:::${var.prefix}-*"
+      },
+      {
+        Effect      = "Deny"
+        Action      = "s3:DeleteObject"
+        NotResource = "arn:aws:s3:::caffe-terraform/${var.prefix}/terraform.tfstate"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_role_policy" "ecr_permissions" {
   name = "ecr-permissions"
   role = aws_iam_role.mail_automation.id
