@@ -1,6 +1,6 @@
 resource "hcloud_server" "prosody" {
   name        = "prosody"
-  server_type = "cpx11"
+  server_type = "cpx21"
   image       = "ubuntu-22.04"
 }
 
