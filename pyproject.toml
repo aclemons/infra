@@ -6,7 +6,7 @@ authors = ["Andrew Clemons <andrew.clemons@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.11.6"
+python = "3.12.0"
 ansible = "8.4.0"
 
 
