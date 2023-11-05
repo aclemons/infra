@@ -186,6 +186,15 @@ resource "aws_iam_role_policy" "lambda_permissions" {
           "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.prefix}-*",
         ],
       },
+      {
+        Effect = "Allow"
+        Action = [
+          "lambda:InvokeFunction",
+        ],
+        Resource = [
+          "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.prefix}-*-migrations",
+        ],
+      },
     ]
   })
 }
