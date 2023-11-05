@@ -167,3 +167,25 @@ resource "aws_iam_role_policy" "ecr_permissions" {
     ]
   })
 }
+
+resource "aws_iam_role_policy" "lambda_permissions" {
+  name = "lambda-permissions"
+  role = aws_iam_role.koinobori_automation.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "lambda:UpdateFunctionCode",
+          "lambda:GetFunctionConfiguration",
+          "lambda:PublishVersion",
+        ],
+        Resource = [
+          "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.prefix}-*",
+        ],
+      },
+    ]
+  })
+}
