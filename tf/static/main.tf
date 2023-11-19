@@ -18,3 +18,10 @@ module "mail_role" {
   prefix    = "mail"
   role_name = "mail-automation"
 }
+
+module "sbobot_role" {
+  source = "../modules/sbobot-role"
+
+  prefix    = "sbobot"
+  role_name = "sbobot-automation"
+}
