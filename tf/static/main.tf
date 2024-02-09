@@ -25,3 +25,9 @@ module "sbobot_role" {
   prefix    = "sbobot"
   role_name = "sbobot-automation"
 }
+
+resource "aws_cloudwatch_log_group" "lambda_insights" {
+  name = "/aws/lambda-insights"
+
+  retention_in_days = 60
+}
