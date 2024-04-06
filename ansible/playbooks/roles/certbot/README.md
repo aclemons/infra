@@ -8,17 +8,13 @@ slackroll
 
 ## Role Variables
 
-    ntp_area: ''
+    certbot_email: ''
 
-Set the ntp pool area. It is empty by default and will thus use the Slackware default configuration.
+Set the email for cerbot.
 
-    ntp_servers:
-      - "0{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
-      - "1{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
-      - "2{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
-      - "3{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
+    certbot_domains:
 
-The ntp servers you'd like to use. Defaults to the Slackware defaults (if they were uncommented).
+The domains to register certificates for.
 
 ## Dependencies
 
