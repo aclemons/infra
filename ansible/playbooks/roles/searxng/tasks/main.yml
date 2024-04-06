@@ -1,0 +1,25 @@
+---
+# tasks file for searxng
+- name: Create searxng configuration directory
+  ansible.builtin.file:
+    path: /etc/searxng
+    state: directory
+    mode: "0700"
+    group: 977
+    owner: 977
+
+- name: Generate searxng configuration file.
+  template:
+    src: settings.yml.j2
+    dest: /etc/searxng/settings.yml
+    mode: 0600
+    group: 977
+    owner: 977
+  become: true
+
+- name: restart searxng
+  shell: |
+    docker stop searxng || true
+    docker system prune -f
+    docker run --name searxng -d -e SEARXNG_BASE_URL=https://search.caffe.nz:444 -v /etc/searxng:/etc/searxng:rw --cap-add CHOWN --cap-add SETGID --cap-add SETUID --cap-drop ALL -p 127.0.0.1:9090:8080 {{ searxng_docker_image }}
+  become: true
