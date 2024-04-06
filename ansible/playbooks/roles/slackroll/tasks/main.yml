@@ -6,18 +6,18 @@
   register: slackroll_install_status
   failed_when: "slackroll_install_status.rc not in [ 0, 2 ]"
 
-- name: Download slackroll (arm)
+- name: Download slackroll
   ansible.builtin.get_url:
-    url: "{{ slackroll_caffe_pkg_repo }}/system/slackroll/slackroll-v51-noarch-1_slack15.0acl.txz"
-    dest: /tmp/slackroll-v51-noarch-1_slack15.0acl.txz
-    checksum: "{{ 'md5:6318aeb68c9c1d4e0880c001d5810c1d' if ansible_architecture == 'armv7l' else 'md5:cee9faa99476ff9315685d035408c914' }}"
+    url: "{{ slackroll_caffe_pkg_repo }}/system/slackroll/slackroll-v55-noarch-1_slack15.0acl.txz"
+    dest: /tmp/slackroll-v55-noarch-1_slack15.0acl.txz
+    checksum: "{{ 'md5:61bc6738584c3f355af78da6efd74eab' }}"
   when:
     - slackroll_install_status.rc != 0
 
 - name: Install slackroll
   shell: |
-    installpkg /tmp/slackroll-v51-noarch-1_slack15.0acl.txz
-    rm /tmp/slackroll-v51-noarch-1_slack15.0acl.txz
+    installpkg /tmp/slackroll-v55-noarch-1_slack15.0acl.txz
+    rm /tmp/slackroll-v55-noarch-1_slack15.0acl.txz
   when:
     - slackroll_install_status.rc != 0
   become: true
@@ -88,7 +88,7 @@
     - "slackroll_alien_sbrepo | string not in slackroll_repos.stdout"
   become: true
 
-- name: install caffe gpg key
+- name: install alien gpg key
   gpg_key:
     gpgbin: /usr/bin/gpg2
     fpr: F2CE1B92EE1F2C0CE97E581E5E56AAAFA75CBDA0
