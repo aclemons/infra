@@ -11,12 +11,27 @@
     "schedule:earlyMondays"
   ],
   "ignoreTests": false,
+  "packageRules": [
+    {
+      "description": "Disable terraform updates (renovate does not yet support opentofu)",
+      "enabled": false,
+      "matchDepTypes": ["required_version"],
+      "matchPackageNames": ["hashicorp/terraform"]
+    }
+  ],
   "pre-commit": {
     "enabled": true
   },
   "rangeStrategy": "pin",
   "timezone": "Asia/Tokyo",
   "customManagers": [
+    {
+      "customType": "regex",
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "opentofu/opentofu",
+      "fileMatch": ["^tf/.opentofu-version$"],
+      "matchStrings": ["(?<currentValue>.*)"]
+    },
     {
       "customType": "regex",
       "fileMatch": [
