@@ -6,8 +6,8 @@
     ":separateMajorReleases",
     ":separateMultipleMajorReleases",
     ":separatePatchReleases",
-    "regexManagers:dockerfileVersions",
-    "regexManagers:githubActionsVersions",
+    "customManagers:dockerfileVersions",
+    "customManagers:githubActionsVersions",
     "schedule:earlyMondays"
   ],
   "ignoreTests": false,
@@ -15,8 +15,12 @@
     {
       "description": "Disable terraform updates (renovate does not yet support opentofu)",
       "enabled": false,
-      "matchDepTypes": ["required_version"],
-      "matchPackageNames": ["hashicorp/terraform"]
+      "matchDepTypes": [
+        "required_version"
+      ],
+      "matchPackageNames": [
+        "hashicorp/terraform"
+      ]
     }
   ],
   "pre-commit": {
@@ -29,8 +33,12 @@
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
-      "fileMatch": ["^tf/.opentofu-version$"],
-      "matchStrings": ["(?<currentValue>.*)"]
+      "fileMatch": [
+        "^tf/.opentofu-version$"
+      ],
+      "matchStrings": [
+        "(?<currentValue>.*)"
+      ]
     },
     {
       "customType": "regex",
