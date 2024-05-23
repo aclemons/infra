@@ -6,13 +6,16 @@ jobs:
   lint:
     name: Run linters
     runs-on: ubuntu-22.04
-    permissions:
     timeout-minutes: 20
     env:
       # renovate: datasource=github-releases depName=terraform-linters/tflint
-      TFLINT_VERSION: 'v0.51.1'
+      TFLINT_VERSION: "v0.51.1"
       # renovate: datasource=pypi depName=pre-commit
-      PRE_COMMIT_VERSION: '3.7.1'
+      PRE_COMMIT_VERSION: "3.7.1"
+      # renovate: datasource=github-releases depName=python-poetry/poetry
+      POETRY_VERSION: "1.8.3"
+      # renovate: datasource=github-releases depName=python-poetry/poetry-plugin-export
+      POETRY_PLUGIN_EXPORT_VERSION: "1.8.0"
     steps:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
         with:
@@ -20,12 +23,14 @@ jobs:
 
       - name: Install poetry
         run: |
-          ./bin/install-poetry.sh
+          curl -sSL https://install.python-poetry.org | POETRY_VERSION=${{ env.POETRY_VERSION }} python3 -
+          poetry self add "poetry-plugin-export==${{ env.POETRY_PLUGIN_EXPORT_VERSION }}"
+          poetry config warnings.export false
 
       - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
-          python-version-file: '.python-version'
-          cache: 'poetry'
+          python-version-file: ".python-version"
+          cache: "poetry"
 
       - name: Set up environment
         run: |
@@ -51,6 +56,17 @@ jobs:
           tofu_version: ${{ env.TOFU_VERSION }}
           tofu_wrapper: false
 
+      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        name: Cache tflint plugin dir
+        with:
+          path: ~/.tflint.d/plugins
+          key: ${{ runner.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+
+      - uses: terraform-linters/setup-tflint@19a52fbac37dacb22a09518e4ef6ee234f2d4987 # v4.0.0
+        name: Setup TFLint
+        with:
+          tflint_version: ${{ env.TFLINT_VERSION }}
+
       - name: Init TFLint
         run: tflint --init
         env:
@@ -61,8 +77,7 @@ jobs:
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: ~/.cache/pre-commit
-          key:
-            ${{ runner.os }}-pre-commit-repo-${{ env.pythonLocation }}-${{
+          key: ${{ runner.os }}-pre-commit-repo-${{ env.pythonLocation }}-${{
             hashFiles('.pre-commit-config.yaml') }}
 
       - name: Configure pre-commit install cache
