@@ -1,0 +1,89 @@
+name: Pull request check
+
+on: [pull_request]
+
+jobs:
+  lint:
+    name: Run linters
+    runs-on: ubuntu-22.04
+    permissions:
+    timeout-minutes: 20
+    env:
+      # renovate: datasource=github-releases depName=terraform-linters/tflint
+      TFLINT_VERSION: 'v0.51.1'
+      # renovate: datasource=pypi depName=pre-commit
+      PRE_COMMIT_VERSION: '3.7.1'
+    steps:
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        with:
+          show-progress: false
+
+      - name: Install poetry
+        run: |
+          ./bin/install-poetry.sh
+
+      - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
+        with:
+          python-version-file: '.python-version'
+          cache: 'poetry'
+
+      - name: Set up environment
+        run: |
+          poetry env use "$(cut -d. -f-2 .python-version)"
+          poetry install --no-interaction
+
+      - name: Configure tofu plugin cache
+        run: |
+          printf 'plugin_cache_dir = "%s/.tofu.d/plugin-cache"\n' "$HOME" > ~/.tofurc
+          mkdir -p ~/.tofu.d/plugin-cache
+
+      - name: Cache Tofu plugins
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: ~/.tofu.d/plugin-cache
+          key: ${{ runner.os }}-tofu-${{ hashFiles('**/.terraform.lock.hcl') }}
+
+      - name: Set tofu version
+        run: echo "TOFU_VERSION=$(cat tf/.opentofu-version)" >> "$GITHUB_ENV"
+
+      - uses: opentofu/setup-opentofu@ae80d4ecaab946d8f5ff18397fbf6d0686c6d46a # v1.0.3
+        with:
+          tofu_version: ${{ env.TOFU_VERSION }}
+          tofu_wrapper: false
+
+      - name: Init TFLint
+        run: tflint --init
+        env:
+          # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Configure pre-commit repo cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: ~/.cache/pre-commit
+          key:
+            ${{ runner.os }}-pre-commit-repo-${{ env.pythonLocation }}-${{
+            hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Configure pre-commit install cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        id: pre_commit_install_cache
+        with:
+          path: ~/.pre-commit-venv
+          key:
+            ${{ runner.os }}-pre-commit-venv-${{ env.PRE_COMMIT_VERSION }}-${{
+            env.pythonLocation }}
+
+      - name: Install pre-commit
+        if: steps.pre_commit_install_cache.outputs.cache-hit != 'true'
+        run: |
+          python -m venv ~/.pre-commit-venv
+          # shellcheck source=/dev/null
+          . ~/.pre-commit-venv/bin/activate
+          pip install pre-commit=='${{ env.PRE_COMMIT_VERSION }}'
+
+      - name: Lint with pre-commit
+        run: |
+          # shellcheck source=/dev/null
+          . ~/.pre-commit-venv/bin/activate
+          pre-commit run --show-diff-on-failure --color=always --all-files
