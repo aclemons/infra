@@ -26,7 +26,9 @@ repos:
     rev: v1.90.0
     hooks:
       - id: terraform_fmt
+        args:
+          - --hook-config=--tf-path=tofu
       - id: terraform_tflint
         args:
           - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl
-          - --hook-config=--delegate-chdir
+          - --hook-config=--delegate-chdir --tf-path=tofu
