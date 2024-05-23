@@ -22,7 +22,6 @@
   "pre-commit": {
     "enabled": true
   },
-  "rangeStrategy": "pin",
   "timezone": "Asia/Tokyo",
   "customManagers": [
     {
