@@ -16,11 +16,11 @@
       "description": "Disable terraform updates (renovate does not yet support opentofu)",
       "enabled": false,
       "matchDepTypes": ["required_version"],
-      "matchPackageNames": ["hashicorp/terraform"]
+      "matchDepNames": ["hashicorp/terraform"]
     },
     {
       "description": "Disable digest pinning for .python-version",
-      "matchPackageNames": ["python"],
+      "matchDepNames": ["python"],
       "pinDigests": false
     }
   ],
