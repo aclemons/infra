@@ -17,6 +17,11 @@
       "enabled": false,
       "matchDepTypes": ["required_version"],
       "matchPackageNames": ["hashicorp/terraform"]
+    },
+    {
+      "description": "Disable digest pinning for .python-version",
+      "matchPackageNames": ["python"],
+      "pinDigests": false
     }
   ],
   "pre-commit": {
