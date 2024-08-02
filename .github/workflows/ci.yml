@@ -11,7 +11,7 @@ jobs:
       # renovate: datasource=github-releases depName=terraform-linters/tflint
       TFLINT_VERSION: "v0.52.0"
       # renovate: datasource=pypi depName=pre-commit
-      PRE_COMMIT_VERSION: "3.7.1"
+      PRE_COMMIT_VERSION: "3.8.0"
       # renovate: datasource=github-releases depName=python-poetry/poetry
       POETRY_VERSION: "1.8.3"
       # renovate: datasource=github-releases depName=python-poetry/poetry-plugin-export
