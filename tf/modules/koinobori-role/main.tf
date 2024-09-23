@@ -178,9 +178,10 @@ resource "aws_iam_role_policy" "lambda_permissions" {
       {
         Effect = "Allow"
         Action = [
-          "lambda:UpdateFunctionCode",
           "lambda:GetFunctionConfiguration",
+          "lambda:GetFunctionUrlConfig",
           "lambda:PublishVersion",
+          "lambda:UpdateFunctionCode",
         ],
         Resource = [
           "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.prefix}-*",
