@@ -1,16 +1,9 @@
-[tool.poetry]
+[project]
 name = "infra"
 version = "0.1.0"
 description = "Infrastructure"
-authors = ["Andrew Clemons <andrew.clemons@gmail.com>"]
 readme = "README.md"
-
-package-mode = false
-
-[tool.poetry.dependencies]
-python = "3.13.0"
-ansible = "10.5.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires-python = "==3.13.0"
+dependencies = [
+  "ansible==10.5.0"
+]
