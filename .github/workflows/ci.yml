@@ -13,7 +13,7 @@ jobs:
       # renovate: datasource=pypi depName=pre-commit
       PRE_COMMIT_VERSION: "4.0.1"
       # renovate: datasource=github-releases depName=python-poetry/poetry
-      POETRY_VERSION: "1.8.3"
+      POETRY_VERSION: "1.8.4"
       # renovate: datasource=github-releases depName=python-poetry/poetry-plugin-export
       POETRY_PLUGIN_EXPORT_VERSION: "1.8.0"
     steps:
