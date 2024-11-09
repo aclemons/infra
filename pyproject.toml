@@ -5,5 +5,5 @@ description = "Infrastructure"
 readme = "README.md"
 requires-python = "==3.13.0"
 dependencies = [
-  "ansible==10.5.0"
+  "ansible==10.6.0"
 ]
