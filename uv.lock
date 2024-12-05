@@ -3,19 +3,19 @@ requires-python = "==3.13.0"
 
 [[package]]
 name = "ansible"
-version = "10.6.0"
+version = "10.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ansible-core" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/50/40/35a204978b1ee8b78766169565f1bce7381d9c2802358e082554c5521502/ansible-10.6.0.tar.gz", hash = "sha256:a8bde9c3ee8ee7c4a085e125777ba39bf837c6e74a0733e1f786389b125e6db2", size = 40769667 }
+sdist = { url = "https://files.pythonhosted.org/packages/d4/64/29fdff6fe7682342adb54802c1cd90b2272d382e1743089af88f90a1d986/ansible-10.7.0.tar.gz", hash = "sha256:59d29e3de1080e740dfa974517d455217601b16d16880314d9be26145c68dc22", size = 41256974 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ee/6b/08f9e535de750a2a2f367934bc04a6757c3c9106b1a85e9b15ae50b47945/ansible-10.6.0-py3-none-any.whl", hash = "sha256:b873b6ca13bde5b6bf9f0ae3b9dba91e135a9612c699d5f6a1e07d7ca2b00458", size = 49409707 },
+    { url = "https://files.pythonhosted.org/packages/f3/95/cb8944902a2cdd94b1e19ff73695548679a388b9c473dc63c8dc64ffea3a/ansible-10.7.0-py3-none-any.whl", hash = "sha256:0089f08e047ceb70edd011be009f5c6273add613fbe491e9697c0556c989d8ea", size = 51576038 },
 ]
 
 [[package]]
 name = "ansible-core"
-version = "2.17.6"
+version = "2.17.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
@@ -24,9 +24,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "resolvelib" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/79/6f/2297325ab61d369f76e1dbef498aeccc5e7b62f95181a8d0cc39108f8433/ansible_core-2.17.6.tar.gz", hash = "sha256:3e53970b7cebfe2adb39b711c1e2f8bbfcbedac828da51dc0357a19070638e95", size = 3102618 }
+sdist = { url = "https://files.pythonhosted.org/packages/9d/f3/3621360fee8c4929aa82c62acedab1baaf3f649e435c5dd56a6c5465ceb0/ansible_core-2.17.7.tar.gz", hash = "sha256:3aaab735d6c4e2d6239bc326800dc0ecda2a1490caa8455b41084ec0bc54dacf", size = 3104429 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5b/8f/6e4fba70bd4f1facc105e37631ea229af49911684feca6552ccbad8cd2fd/ansible_core-2.17.6-py3-none-any.whl", hash = "sha256:dab09cd49fe7e17003e13188ce1ab52a0a6e5b88bc4bf29ff101cfdcb2862395", size = 2194970 },
+    { url = "https://files.pythonhosted.org/packages/52/4b/e176f8ae78fdff0e2e2d593dabcd5e8fb31cf94b1f655778666c91f91241/ansible_core-2.17.7-py3-none-any.whl", hash = "sha256:64d4f0a006687a5621aa80dca54fd0c5ae75145b7aac8c1b8d7f07a1399c4705", size = 2196119 },
 ]
 
 [[package]]
@@ -93,7 +93,7 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "ansible", specifier = "==10.6.0" }]
+requires-dist = [{ name = "ansible", specifier = "==10.7.0" }]
 
 [[package]]
 name = "jinja2"
