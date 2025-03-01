@@ -40,7 +40,7 @@ jobs:
           mkdir -p ~/.tofu.d/plugin-cache
 
       - name: Cache Tofu plugins
-        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: ~/.tofu.d/plugin-cache
           key: ${{ runner.os }}-tofu-${{ hashFiles('**/.terraform.lock.hcl') }}
@@ -53,7 +53,7 @@ jobs:
           tofu_version: ${{ env.TOFU_VERSION }}
           tofu_wrapper: false
 
-      - uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
+      - uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         name: Cache tflint plugin dir
         with:
           path: ~/.tflint.d/plugins
@@ -71,14 +71,14 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Configure pre-commit repo cache
-        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: ~/.cache/pre-commit
           key: ${{ runner.os }}-pre-commit-repo-${{ env.pythonLocation }}-${{
             hashFiles('.pre-commit-config.yaml') }}
 
       - name: Configure pre-commit install cache
-        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         id: pre_commit_install_cache
         with:
           path: ~/.pre-commit-venv
