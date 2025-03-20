@@ -1,6 +1,6 @@
 resource "aws_iam_role" "searxng_infra_automation" {
   name        = var.role_name
-  description = "Deploy searxng infra code from GHA."
+  description = "Deploy searxng-infra code from GHA."
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -112,11 +112,9 @@ resource "aws_iam_role_policy" "terraform_permissions" {
         Effect = "Allow"
         Action = [
           "s3:Get*",
-          "s3:Put*",
           "s3:List*",
-          "s3:CreateBucket"
         ],
-        Resource = "arn:aws:s3:::${var.prefix}-*terraform"
+        Resource = "arn:aws:s3:::caffe-terraform"
       },
       {
         Effect = "Allow"
@@ -125,7 +123,7 @@ resource "aws_iam_role_policy" "terraform_permissions" {
           "s3:PutObject",
           "s3:DeleteObject",
         ],
-        Resource = "arn:aws:s3:::${var.prefix}-*terraform/*/terraform.tfstate"
+        Resource = "arn:aws:s3:::caffe-terraform/${var.prefix}/terraform.tfstate"
       },
       {
         Effect = "Allow"
@@ -133,14 +131,32 @@ resource "aws_iam_role_policy" "terraform_permissions" {
           "dynamodb:Describe*",
           "dynamodb:List*",
           "dynamodb:Get*",
-          "dynamodb:CreateTable",
           "dynamodb:PutItem",
           "dynamodb:DeleteItem",
-          "dynamodb:TagResource",
-          "dynamodb:UntagResource",
         ],
-        Resource = "arn:aws:dynamodb:*:*:table/${var.prefix}-*terraform"
+        Resource = "arn:aws:dynamodb:*:*:table/caffe-terraform"
       },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "s3_permissions" {
+  name = "s3-permissions"
+  role = aws_iam_role.searxng_infra_automation.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "s3:*"
+        Resource = "arn:aws:s3:::${var.prefix}-*"
+      },
+      {
+        Effect      = "Deny"
+        Action      = "s3:DeleteObject"
+        NotResource = "arn:aws:s3:::caffe-terraform/${var.prefix}/terraform.tfstate"
+      }
     ]
   })
 }
@@ -156,6 +172,7 @@ resource "aws_iam_role_policy" "ecr_permissions" {
         Effect = "Allow"
         Action = [
           "ecr:GetAuthorizationToken",
+          "ecr:CreateRepository",
         ]
         Resource = "*"
       },
@@ -168,6 +185,27 @@ resource "aws_iam_role_policy" "ecr_permissions" {
   })
 }
 
+resource "aws_iam_role_policy" "cloudwatch_permissions" {
+  name = "cloudwatch-permissions"
+  role = aws_iam_role.searxng_infra_automation.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = "logs:DescribeLogGroups",
+        Resource = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"
+      },
+      {
+        Effect   = "Allow",
+        Action   = "logs:*",
+        Resource = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.prefix}*"
+      },
+    ]
+  })
+}
+
 resource "aws_iam_role_policy" "lambda_permissions" {
   name = "lambda-permissions"
   role = aws_iam_role.searxng_infra_automation.id
@@ -176,16 +214,18 @@ resource "aws_iam_role_policy" "lambda_permissions" {
     Version = "2012-10-17"
     Statement = [
       {
+        Effect   = "Allow"
+        Action   = "lambda:*"
+        Resource = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.prefix}*"
+      },
+      {
         Effect = "Allow"
         Action = [
-          "lambda:GetFunctionConfiguration",
-          "lambda:GetFunctionUrlConfig",
-          "lambda:PublishVersion",
-          "lambda:UpdateFunctionCode",
+          "lambda:ListFunctions",
+          "lambda:ListEventSourceMappings",
+          "lambda:GetLayerVersion",
         ],
-        Resource = [
-          "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.prefix}-*",
-        ],
+        Resource = "*"
       }
     ]
   })
