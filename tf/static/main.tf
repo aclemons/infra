@@ -26,6 +26,13 @@ module "sbobot_role" {
   role_name = "sbobot-automation"
 }
 
+module "searxng_role" {
+  source = "../modules/searxng-infra-role"
+
+  prefix    = "searxng-infra"
+  role_name = "searxng-infra-automation"
+}
+
 resource "aws_cloudwatch_log_group" "lambda_insights" {
   name = "/aws/lambda-insights"
 
