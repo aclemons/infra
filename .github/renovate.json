@@ -15,18 +15,12 @@
     {
       "description": "Disable terraform updates (renovate does not yet support opentofu)",
       "enabled": false,
-      "matchDepTypes": [
-        "required_version"
-      ],
-      "matchDepNames": [
-        "hashicorp/terraform"
-      ]
+      "matchDepTypes": ["required_version"],
+      "matchDepNames": ["hashicorp/terraform"]
     },
     {
       "description": "Disable digest pinning for .python-version",
-      "matchDepNames": [
-        "python"
-      ],
+      "matchDepNames": ["python"],
       "pinDigests": false
     }
   ],
@@ -39,23 +33,15 @@
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
-      "managerFilePatterns": [
-        "/^tf/\\.opentofu-version$/"
-      ],
-      "matchStrings": [
-        "(?<currentValue>.*)"
-      ]
+      "managerFilePatterns": ["/^tf/\\.opentofu-version$/"],
+      "matchStrings": ["(?<currentValue>.*)"]
     },
     {
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
-      "managerFilePatterns": [
-        "/^tf/.*\\.tf$/"
-      ],
-      "matchStrings": [
-        "required_version\\s=\\s\"(?<currentValue>.*?)\""
-      ]
+      "managerFilePatterns": ["/^tf/.*\\.tf$/"],
+      "matchStrings": ["required_version\\s=\\s\"(?<currentValue>.*?)\""]
     },
     {
       "customType": "regex",
