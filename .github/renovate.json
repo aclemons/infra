@@ -15,12 +15,18 @@
     {
       "description": "Disable terraform updates (renovate does not yet support opentofu)",
       "enabled": false,
-      "matchDepTypes": ["required_version"],
-      "matchDepNames": ["hashicorp/terraform"]
+      "matchDepTypes": [
+        "required_version"
+      ],
+      "matchDepNames": [
+        "hashicorp/terraform"
+      ]
     },
     {
       "description": "Disable digest pinning for .python-version",
-      "matchDepNames": ["python"],
+      "matchDepNames": [
+        "python"
+      ],
       "pinDigests": false
     }
   ],
@@ -33,20 +39,28 @@
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
-      "fileMatch": ["^tf/\\.opentofu-version$"],
-      "matchStrings": ["(?<currentValue>.*)"]
+      "managerFilePatterns": [
+        "/^tf/\\.opentofu-version$/"
+      ],
+      "matchStrings": [
+        "(?<currentValue>.*)"
+      ]
     },
     {
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
-      "fileMatch": ["^tf/.*\\.tf$"],
-      "matchStrings": ["required_version\\s=\\s\"(?<currentValue>.*?)\""]
+      "managerFilePatterns": [
+        "/^tf/.*\\.tf$/"
+      ],
+      "matchStrings": [
+        "required_version\\s=\\s\"(?<currentValue>.*?)\""
+      ]
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^ansible\\/playbooks\\/roles\\/searxng\\/defaults\\/main.yml$"
+      "managerFilePatterns": [
+        "/^ansible\\/playbooks\\/roles\\/searxng\\/defaults\\/main.yml$/"
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?\\s+searxng_docker_image\\s*:\\s*[\"']?searxng/searxng:(?<currentValue>.+?)@(?<currentDigest>sha256:[a-f0-9]+)[\"']?\\s"
