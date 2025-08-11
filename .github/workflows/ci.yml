@@ -11,7 +11,7 @@ jobs:
       # renovate: datasource=github-releases depName=terraform-linters/tflint
       TFLINT_VERSION: "v0.58.1"
       # renovate: datasource=pypi depName=pre-commit
-      PRE_COMMIT_VERSION: "4.2.0"
+      PRE_COMMIT_VERSION: "4.3.0"
       # renovate: datasource=pypi depName=uv
       UV_VERSION: "0.8.8"
     steps:
