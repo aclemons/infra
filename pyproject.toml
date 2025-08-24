@@ -3,7 +3,7 @@ name = "infra"
 version = "0.1.0"
 description = "Infrastructure"
 readme = "README.md"
-requires-python = "==3.13.6"
+requires-python = "==3.13.7"
 dependencies = [
   "ansible==11.8.0"
 ]
