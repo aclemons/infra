@@ -2,7 +2,7 @@
 # defaults file for searxng
 
 # renovate: datasource=docker depName=searxng/searxng versioning=loose
-searxng_docker_image: searxng/searxng:2025.12.26-fc6e59d3e@sha256:74c9ee6120b2c990999fcbe14b69b0dbb981bfbd70b2f2cf63b2c094f11bc883
+searxng_docker_image: searxng/searxng:2025.12.30-a5c946a32@sha256:1ad4159e74903f8870e3464df701b800a75bd2854f5d11b44ce09ee297f3c158
 
 searxng_secret_key: !vault |
   $ANSIBLE_VAULT;1.1;AES256
