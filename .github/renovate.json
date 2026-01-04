@@ -22,6 +22,10 @@
       "description": "Disable digest pinning for .python-version",
       "matchDepNames": ["python"],
       "pinDigests": false
+    },
+    {
+      "matchDatasources": ["terraform-provider", "terraform-module"],
+      "registryUrls": ["https://registry.opentofu.org"]
     }
   ],
   "pre-commit": {
