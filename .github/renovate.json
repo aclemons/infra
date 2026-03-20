@@ -38,14 +38,14 @@
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
       "managerFilePatterns": ["/^tf/\\.opentofu-version$/"],
-      "matchStrings": ["(?<currentValue>.*)"]
+      "matchStrings": ["(?<currentValue>[0-9.]+)"]
     },
     {
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
       "managerFilePatterns": ["/^tf/.*\\.tf$/"],
-      "matchStrings": ["required_version\\s=\\s\"(?<currentValue>.*?)\""]
+      "matchStrings": ["required_version\\s*=\\s*\"(?<currentValue>[0-9.]+)\""]
     },
     {
       "customType": "regex",
