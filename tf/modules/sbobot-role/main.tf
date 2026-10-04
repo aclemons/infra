@@ -123,18 +123,10 @@ resource "aws_iam_role_policy" "terraform_permissions" {
           "s3:PutObject",
           "s3:DeleteObject",
         ],
-        Resource = "arn:aws:s3:::caffe-terraform/${var.prefix}/terraform.tfstate"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "dynamodb:Describe*",
-          "dynamodb:List*",
-          "dynamodb:Get*",
-          "dynamodb:PutItem",
-          "dynamodb:DeleteItem",
-        ],
-        Resource = "arn:aws:dynamodb:*:*:table/caffe-terraform"
+        Resource = [
+          "arn:aws:s3:::caffe-terraform/${var.prefix}/terraform.tfstate",
+          "arn:aws:s3:::caffe-terraform/${var.prefix}/terraform.tfstate.tflock",
+        ]
       },
     ]
   })
@@ -153,9 +145,12 @@ resource "aws_iam_role_policy" "s3_permissions" {
         Resource = "arn:aws:s3:::${var.prefix}-*"
       },
       {
-        Effect      = "Deny"
-        Action      = "s3:DeleteObject"
-        NotResource = "arn:aws:s3:::caffe-terraform/${var.prefix}/terraform.tfstate"
+        Effect = "Deny"
+        Action = "s3:DeleteObject"
+        NotResource = [
+          "arn:aws:s3:::caffe-terraform/${var.prefix}/terraform.tfstate",
+          "arn:aws:s3:::caffe-terraform/${var.prefix}/terraform.tfstate.tflock",
+        ]
       }
     ]
   })
