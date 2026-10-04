@@ -179,7 +179,7 @@ resource "aws_iam_role_policy" "ecr_permissions" {
       {
         Effect   = "Allow"
         Action   = "ecr:*"
-        Resource = "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:repository/${var.prefix}*"
+        Resource = "arn:aws:ecr:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:repository/${var.prefix}*"
       }
     ]
   })
@@ -195,12 +195,12 @@ resource "aws_iam_role_policy" "cloudwatch_permissions" {
       {
         Effect   = "Allow",
         Action   = "logs:DescribeLogGroups",
-        Resource = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"
+        Resource = "arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:*"
       },
       {
         Effect   = "Allow",
         Action   = "logs:*",
-        Resource = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.prefix}*"
+        Resource = "arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.prefix}*"
       },
     ]
   })
@@ -216,7 +216,7 @@ resource "aws_iam_role_policy" "lambda_permissions" {
       {
         Effect   = "Allow"
         Action   = "lambda:*"
-        Resource = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.prefix}*"
+        Resource = "arn:aws:lambda:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:function:${var.prefix}*"
       },
       {
         Effect = "Allow"
@@ -255,7 +255,7 @@ resource "aws_iam_role_policy" "ssm_permissions" {
           "ssm:RemoveTagsFromResource",
         ],
         Resource = [
-          "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${var.prefix}/*",
+          "arn:aws:ssm:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:parameter/${var.prefix}/*",
         ]
       }
     ]
