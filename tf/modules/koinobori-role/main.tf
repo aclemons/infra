@@ -13,11 +13,10 @@ resource "aws_iam_role" "koinobori_automation" {
             Federated = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
           },
           Condition = {
-            StringLike = {
-              "token.actions.githubusercontent.com:sub" = "repo:aclemons/koinobori:*"
-            }
             StringEquals = {
-              "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+              "token.actions.githubusercontent.com:aud"          = "sts.amazonaws.com",
+              "token.actions.githubusercontent.com:sub"          = "repo:aclemons/koinobori:refs/heads/master",
+              "token.actions.githubusercontent.com:workflow_ref" = "aclemons/koinobori/.github/workflows/deploy.yml@refs/heads/master"
             }
           }
         }
