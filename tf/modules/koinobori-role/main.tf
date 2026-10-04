@@ -14,9 +14,8 @@ resource "aws_iam_role" "koinobori_automation" {
           },
           Condition = {
             StringEquals = {
-              "token.actions.githubusercontent.com:aud"          = "sts.amazonaws.com",
-              "token.actions.githubusercontent.com:sub"          = "repo:aclemons/koinobori:ref:refs/heads/master",
-              "token.actions.githubusercontent.com:workflow_ref" = "aclemons/koinobori/.github/workflows/deploy.yml@refs/heads/master"
+              "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com",
+              "token.actions.githubusercontent.com:sub" = "repo:aclemons/koinobori:environment:dev"
             }
           }
         }
